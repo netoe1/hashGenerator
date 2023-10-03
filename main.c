@@ -4,27 +4,46 @@
 #include <locale.h>
 #include <time.h>
 
-char *validArgs = {"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%¨&*()_-+="} ;
+char *ptr = {"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*()-"};
 
+
+int generateHash(int length);
 int main(int argc,char **argv)
 {
-    setlocale(LC_ALL,"");
-    srand(time(0));
+	srand(time(NULL));
+	setlocale(LC_ALL,"");
+	
 
-    if(argc == 3)
-    {
-        if(strcmp(argv[1],"create_hash") == 0 && &argv[2] != NULL){
-            int i;
-            puts("The hash has been generated.");
-            for(i = 0;i < atoi(argv[2]);i++){
-                printf("%c",validArgs[rand() % strlen(validArgs)]);
-            }
-            printf("\n");
-            return 0;
-        }
-    }
+	if(argc >= 2){
+		if(argv[1] != NULL){
+			if((strcmp("--generate",argv[1]) == 0 || strcmp("-g",argv[1]) == 0) && &argv[2] != NULL){
+				int integer = atoi(argv[2]);
+				generateHash(integer);
+			}
+			else if(strcmp("--help",argv[1]) == 0 || strcmp("-h",argv[1]) == 0){
+				puts("Valid Usage: <program_name> <function> <flag>");
+				puts("--help || -h\t# Outputs valid commands to use.");
+				puts("--generate || -g <length> \t# Generates a hash acording to lenght.");
+			}	
+			return 0;
+		}
+	}
 
-    printf("Correct usage: <program> <create_hash> <length>");
+	puts("Invalid usage, use --help or -h to see valid commands.");
+	return -1;
+}
 
-    return -1;
+int generateHash(int length){
+	if( &length != NULL){
+		for(int i = 0;i < length;i++)
+		{
+			printf("%c",ptr[rand() % strlen(ptr)]);
+		}
+		return 0;	
+	}
+	
+	
+	perror("You must provide a valid length to create an valid hash.");
+	
+	return -1;
 }
